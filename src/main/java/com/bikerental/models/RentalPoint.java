@@ -10,16 +10,12 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "rental_points")
+@Getter @Setter
 public class RentalPoint {
-
-    // Геттеры и сеттеры
-    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
-    @Getter
     @Column(nullable = false, length = 200)
     private String location;
 
@@ -36,7 +32,6 @@ public class RentalPoint {
 
     public RentalPoint() {
     }
-
 
     public List<Bicycle> getAvailableBicycles() {return new ArrayList<>(availableBicycles);}
     public void setAvailableBicycles(List<Bicycle> availableBicycles) {this.availableBicycles = new ArrayList<>(availableBicycles);}

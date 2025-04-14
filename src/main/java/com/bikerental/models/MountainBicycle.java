@@ -14,7 +14,8 @@ import lombok.Setter;
 
 public class MountainBicycle extends Bicycle {
 
-    // Специфичные методы для горного велосипеда
+    private static final double BASE_PRICE = 25000.0;
+
     @Column(name = "suspension_type", nullable = false)
     private String suspensionType;  // Тип подвески
 
@@ -34,7 +35,24 @@ public class MountainBicycle extends Bicycle {
 
     @Override
     public double getRemainingPiece() {
-        // Логика расчета для горного велосипеда
-        return 1000.0; // пример значения
+        double price = BASE_PRICE;
+
+        // Наценка за тип подвески
+        switch (suspensionType.toLowerCase()) {
+            case "full" -> price += 8000.0;
+            case "front" -> price += 5000.0;
+            case "hardtail" -> price += 3000.0;
+        }
+
+        // Наценка за размер колес
+        if (wheelSize > 27.5) {
+            price += 2000.0; // Крупные колеса дороже
+        }
+
+        // Премиум за производителя (горные велосипеды от известных производителей ценятся выше)
+        double countryPremium = Manufacturer.getMountainBikePremium(getManufacturer().getCountry());
+        price += countryPremium;
+        double countryMultiplier = Manufacturer.getCountryMultiplier(getManufacturer().getCountry());
+        return price * countryMultiplier;
     }
 }

@@ -44,7 +44,24 @@ public class CityBicycle extends Bicycle {
 
     @Override
     public double getRemainingPiece() {
-        // Логика расчета для городского велосипеда
-        return 800.0; // пример значения
+        // Базовая стоимость велосипеда
+        double basePrice = 15000.0;
+
+        // Наценки за дополнительные детали
+        if (hasBasket) {
+            basePrice += 1000.0;
+        }
+        if (hasFenders) {
+            basePrice += 800.0;
+        }
+        if (hasBelt) {
+            basePrice += 300.0;
+        }
+
+        // Коэффициент страны производителя
+        double countryMultiplier = Manufacturer.getCountryMultiplier(getManufacturer().getCountry());
+
+        return basePrice * countryMultiplier;
     }
+
 }

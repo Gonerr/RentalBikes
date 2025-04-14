@@ -4,25 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 @Setter
 @Entity
 @Table(name = "bicycle_characteristics")
-
 
 public class CharacteristicsOfBicycles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
     @Column(name = "type", nullable = false, length = 50)
     private String type;        // Тип велосипеда
 
-    @Getter
     @Column
     private double weight;      // Вес велосипеда
 
-    @Getter
     @Column(name = "gear_count", nullable = false)
     private int gearCount;     // Количество передач
 
@@ -32,7 +29,6 @@ public class CharacteristicsOfBicycles {
     public CharacteristicsOfBicycles() {
     }
 
-    // Геттеры и сеттеры
     public String getCharacteristics() {
         return "Type: " + type + ", Weight: " + weight +
                 ", Gears: " + gearCount + ", Lights: " + hasLights;

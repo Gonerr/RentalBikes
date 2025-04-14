@@ -2,6 +2,8 @@ package com.bikerental.models;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "clients")
+@Setter
+@Getter
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,12 +40,6 @@ public class Client {
 
 
     // Геттеры и сеттеры
-    public Long getId() { return id; }
-
-    public String getName() { return name;}
-    public void setName(String name) { this.name = name;}
-    public String getContactInfo() { return contactInfo;}
-    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo;}
     public List<Bicycle> getRentedBicycles() { return new ArrayList<>(rentedBicycles);}
     public void setRentedBicycles(List<Bicycle> rentedBicycles) {this.rentedBicycles = new ArrayList<>(rentedBicycles);}
 

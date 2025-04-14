@@ -9,11 +9,10 @@ import lombok.Setter;
 @DiscriminatorValue("ROAD")
 @Table(name = "road_bikes")
 // Шоссейный велосипед
+@Setter
+@Getter
 public class RoadBicycle extends Bicycle {
-
-    // Специфичные методы для шоссейного велосипеда
-    @Setter
-    @Getter
+    private static final double BASE_PRICE = 30000.0;
     @Column(name = "tire_width", nullable = false)
     private double tireWidth;   // Ширина шины
 
@@ -31,12 +30,25 @@ public class RoadBicycle extends Bicycle {
         this.isAero = isAero;
     }
 
-    public boolean isAero() { return isAero;}
-    public void setAero(boolean aero) { isAero = aero; }
-
     @Override
     public double getRemainingPiece() {
-        // Логика расчета для шоссейного велосипеда
-        return 1200.0; // пример значения
+        double price = BASE_PRICE;
+
+        // Наценка за аэродинамику
+        if (isAero) {
+            price += 15000.0;
+        }
+
+        // Корректировка за ширину шин
+        if (tireWidth < 25.0) {
+            price += 3000.0; // Ультра-узкие шины премиум класса
+        } else if (tireWidth < 28.0) {
+            price += 1000.0; // Стандартные гоночные
+        }
+
+        // Общий страновой коэффициент
+        double countryMultiplier = Manufacturer.getCountryMultiplier(getManufacturer().getCountry());
+
+        return price * countryMultiplier;
     }
 }

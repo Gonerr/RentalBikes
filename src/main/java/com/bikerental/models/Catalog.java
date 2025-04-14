@@ -5,12 +5,13 @@ import java.util.stream.Collectors;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "catalogs")
-
+@Getter @Setter
 public class Catalog {
-    @Getter
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

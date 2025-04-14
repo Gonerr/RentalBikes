@@ -18,7 +18,6 @@ public class Main {
         ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
 
         try {
-            // Получаем репозитории
             ManufacturerRepository manufacturerRepo = context.getBean(ManufacturerRepository.class);
             BicycleRepository bicycleRepo = context.getBean(BicycleRepository.class);
             RentalPointRepository rentalPointRepo = context.getBean(RentalPointRepository.class);
@@ -31,10 +30,8 @@ public class Main {
             // 2. Создаем и сохраняем велосипеды с разными характеристиками
             MountainBicycle mountainBike1 = createMountainBike("Marlin", manufacturer, "Женская", 25.5);
             MountainBicycle mountainBike2 = createMountainBike("Fuel", manufacturer, "Спортивная", 30.0);
-
             mountainBike1 = bicycleRepo.save(mountainBike1);
             mountainBike2 = bicycleRepo.save(mountainBike2);
-
 
             // Создаем и сохраняем пункт проката
             RentalPoint point = new RentalPoint();
@@ -48,8 +45,8 @@ public class Main {
 
             // Создаем и сохраняем клиента
             Client client = new Client();
-            client.setName("John Doe");
-            client.setContactInfo("john@example.com");
+            client.setName("Петров Иван");
+            client.setContactInfo("Ivanov@example.com");
             client = clientRepo.save(client);
 
             // Аренда велосипеда

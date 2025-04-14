@@ -3,7 +3,6 @@ package com.bikerental.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "bicycles")
@@ -19,19 +18,15 @@ public abstract class Bicycle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Getter @Setter
     // связь с производителем
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    @Getter @Setter
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "characteristics_id")
     private CharacteristicsOfBicycles characteristics;
 
-    @Getter @Setter
     @Column(nullable = false)
     private String model;
 
