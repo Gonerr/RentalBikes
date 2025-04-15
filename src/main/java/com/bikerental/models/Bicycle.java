@@ -1,5 +1,6 @@
 package com.bikerental.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,12 +12,17 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "bike_type")
 @Getter @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public abstract class Bicycle {
     // автоинкрементный первичный ключ
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bicycle_id;
+
+    // Это поле будет автоматически заполняться из @DiscriminatorColumn
+    @Column(name = "bike_type", insertable = false, updatable = false)
+    private String bikeType;
 
     // связь с производителем
     @ManyToOne(fetch = FetchType.LAZY)

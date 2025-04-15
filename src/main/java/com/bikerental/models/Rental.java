@@ -3,9 +3,11 @@ package com.bikerental.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Entity
 @Table(name = "rentals")
@@ -34,14 +36,17 @@ public class Rental {
     @JoinColumn(name = "rental_point_id", nullable = false)
     private RentalPoint rentalPoint;
 
-    @Column(name = "actual_end_date")
-    private LocalDateTime actualEndDate;
+    // Устанавливаем фактическую дату возврата
+    @Setter
+    @Column(name = "actual_return_date")
+    private LocalDateTime actualReturnDate; // поле для фактической даты возврата
 
     @Column(name = "total_cost")
     private Double totalCost;
 
     @Column(nullable = false, length = 20)
     private String status = "ACTIVE"; // ACTIVE, COMPLETED, CANCELLED
+
 
     public Rental() {
     }
@@ -56,4 +61,5 @@ public class Rental {
     public boolean isActive() {
         return "ACTIVE".equals(status);
     }
+
 }

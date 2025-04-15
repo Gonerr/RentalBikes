@@ -1,11 +1,14 @@
 package com.bikerental.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "manufacturers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 public class Manufacturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

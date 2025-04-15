@@ -7,7 +7,8 @@ import lombok.Setter;
 @Entity
 
 @DiscriminatorValue("ROAD")
-@Table(name = "road_bikes")
+@Table(name = "road_bicycles")
+@PrimaryKeyJoinColumn(name = "bicycle_id")
 // Шоссейный велосипед
 @Setter
 @Getter

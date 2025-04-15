@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "bicycle_characteristics")
+@Table(name = "characteristics_of_bicycles")
 
 public class CharacteristicsOfBicycles {
     @Id

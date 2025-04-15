@@ -10,14 +10,15 @@ import lombok.Setter;
 @Entity
 
 @DiscriminatorValue("MOUNTAIN")
-@Table(name = "mountain_bikes")
+@Table(name = "mountain_bicycles")
+@PrimaryKeyJoinColumn(name = "bicycle_id")
 
 public class MountainBicycle extends Bicycle {
 
     private static final double BASE_PRICE = 25000.0;
 
     @Column(name = "suspension_type", nullable = false)
-    private String suspensionType;  // Тип подвески
+    private String suspensionType = "full";  // Тип подвески
 
     @Column(name = "wheel_size", nullable = false, precision = 4)
     private double wheelSize;       // Размер колеса
@@ -31,6 +32,10 @@ public class MountainBicycle extends Bicycle {
         super(model, manufacturer, characteristics);
         this.suspensionType = suspensionType;
         this.wheelSize = wheelSize;
+    }
+
+    public String getSuspensionType() {
+        return suspensionType != null ? suspensionType.toLowerCase() : null;
     }
 
     @Override

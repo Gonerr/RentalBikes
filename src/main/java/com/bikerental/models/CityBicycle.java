@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 @Entity
 
 @DiscriminatorValue("CITY")
-@Table(name = "city_bikes")
+@Table(name = "city_bicycles")
+@PrimaryKeyJoinColumn(name = "bicycle_id")
 public class CityBicycle extends Bicycle {
 
     @Column(name = "has_basket", nullable = false)
