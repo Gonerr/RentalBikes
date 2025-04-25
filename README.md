@@ -113,7 +113,7 @@
 | GET | `/api/manufacturers/{id}` | Информация о производителе | - |
 | POST | `/api/manufacturers` | Создать производителя | Тело запроса (Manufacturer) |
 
-<img src="Диаграмма%20классов.png" alt="Диаграмма классов" width="700"/>
+<img src="Диаграмма классов.drawio.png" alt="Диаграмма классов" width="700"/>
 
 ## 3. Архитектурные решения
 
@@ -148,54 +148,83 @@ public class RoadBicycle extends Bicycle {
 
 #### `<img src="бд.png" alt="Диаграмма сущностей" width="700"/>`
 
-### Описание таблиц
+### Структура базы данных
 
-### Специализированные таблицы велосипедов
+#### Основные таблицы
 
-4. **city_bicycles** - характеристики городских велосипедов:
+1. **manufacturers** - производители велосипедов:
+   - `id` (PK)
+   - `name` (unique)
+   - `country`
 
-   - Наличие корзины (`has_basket`)
-   - Наличие крыльев (`has_fenders`)
-   - Тип привода (`has_belt`)
-5. **mountain_bicycles** - горные велосипеды:
+2. **bicycles** - основная таблица велосипедов:
+   - `bicycle_id` (PK)
+   - `bike_type` (discriminator)
+   - `manufacturer_id` (FK)
+   - `characteristics_id` (FK)
+   - `rental_point_id` (FK)
+   - `model`
+   - `price`
+   - `daily_rental_price`
 
-   - Тип подвески (`suspension_type`)
-   - Размер колес (`wheel_size`)
-6. **road_bicycles** - шоссейные велосипеды:
+3. **clients** - клиенты:
+   - `id` (PK)
+   - `name`
+   - `email` (unique)
+   - `phone` (unique)
 
-   - Ширина покрышек (`tire_width`)
-   - Аэродинамическая конструкция (`is_aero`)
+#### Специализированные таблицы велосипедов
 
-### Аренда
+4. **mountain_bicycles** - горные велосипеды:
+   - `suspension_type` (full/front/none)
+   - `wheel_size` (24-29)
+
+5. **road_bicycles** - шоссейные велосипеды:
+   - `tire_width` (18-32)
+   - `is_aero` (boolean)
+
+6. **city_bicycles** - городские велосипеды:
+   - `has_basket` (boolean)
+   - `has_fenders` (boolean)
+   - `has_belt` (boolean)
+
+#### Аренда и пункты проката
 
 7. **rental_points** - пункты проката:
-
    - `id` (PK)
-   - `location` - местоположение
+   - `location`
+   - `street`
+   - `building`
+   - `phone`
+
 8. **rentals** - информация об аренде:
-
    - `id` (PK)
-   - `client_id` (FK) - клиент
-   - `bicycle_id` (FK) - велосипед
-   - `rental_point_id` (FK) - пункт выдачи
-   - Даты аренды (`start_date`, `end_date`)
-   - Фактические даты (`actual_end_date`, `actual_return_date`)
-   - Стоимость (`total_cost`)
-   - Статус (`status`)
+   - `client_id` (FK)
+   - `bicycle_id` (FK)
+   - `start_date`
+   - `end_date`
+   - `actual_return_date`
+   - `total_cost`
 
-### Вспомогательные таблицы
+#### Характеристики
 
-9. **characteristics_of_bicycles** - технические характеристики:
+9. **characteristics_of_bicycles**:
+   - `id` (PK)
+   - `frame_material` (Алюминий/Сталь/Карбон/Титан)
+   - `weight`
+   - `number_of_speeds`
 
-   - Количество передач (`gear_count`)
-   - Наличие фар (`has_lights`)
-   - Вес (`weight`)
-   - Тип (`type`)
-10. **client_rented_bicycles** - связь клиентов и арендованных велосипедов (many-to-many)
-11. **rental_point_bicycles** - связь пунктов проката и велосипедов (many-to-many)
+#### Связующие таблицы
+
+10. **client_rented_bicycles** - связь клиентов и арендованных велосипедов:
+   - `client_id` (FK)
+   - `bicycle_id` (FK)
 
 ### Ключевые связи
 
-- Клиент может арендовать несколько велосипедов (через таблицу `client_rented_bicycles`)
-- Каждый велосипед принадлежит определенному производителю (`manufacturer_id`)
-- Аренда всегда привязана к пункту проката (`rental_point_id`)
+- Велосипеды наследуются от основной таблицы `bicycles` (JOINED strategy)
+- Каждый велосипед принадлежит одному производителю
+- Каждый велосипед имеет один набор характеристик
+- Каждый велосипед привязан к одному пункту проката
+- Клиент может арендовать несколько велосипедов
+- Каждая аренда связана с одним клиентом и одним велосипедом
