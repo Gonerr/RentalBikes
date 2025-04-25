@@ -1,0 +1,12 @@
+.navbar{
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: row;
+    font-size: smaller;
+    gap: var(--dl-size-tripleunit);
+}
+
+.navLink{
+    text-decoration: none;
+    color: var(--dl-color-font);
+}

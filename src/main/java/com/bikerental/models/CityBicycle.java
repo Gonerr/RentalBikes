@@ -3,7 +3,6 @@ package com.bikerental.models;
 import jakarta.persistence.*;
 
 @Entity
-
 @DiscriminatorValue("CITY")
 @Table(name = "city_bicycles")
 @PrimaryKeyJoinColumn(name = "bicycle_id")
@@ -31,17 +30,34 @@ public class CityBicycle extends Bicycle {
         this.hasFenders = hasFenders;
         this.hasBelt = hasBelt;
         this.hasBasket = hasBasket;
+        setPrice(getRemainingPiece());
+        updateDailyRentalPrice();
     }
 
-    // Специфичные методы для городского велосипеда
-    public boolean hasBasket() { return hasBasket;}
-    public void setHasBasket(boolean hasBasket) { this.hasBasket = hasBasket;}
+    // Геттеры и сеттеры
+    public boolean isHasBasket() {
+        return hasBasket;
+    }
 
-    public boolean hasFenders() {return hasFenders;}
-    public void setHasFenders(boolean hasFenders) {this.hasFenders = hasFenders;}
+    public void setHasBasket(boolean hasBasket) {
+        this.hasBasket = hasBasket;
+    }
 
-    public boolean hasBelt() {return hasBelt;}
-    public void setHasBelt(boolean hasBelt) {this.hasBelt = hasBelt;}
+    public boolean isHasFenders() {
+        return hasFenders;
+    }
+
+    public void setHasFenders(boolean hasFenders) {
+        this.hasFenders = hasFenders;
+    }
+
+    public boolean isHasBelt() {
+        return hasBelt;
+    }
+
+    public void setHasBelt(boolean hasBelt) {
+        this.hasBelt = hasBelt;
+    }
 
     @Override
     public double getRemainingPiece() {
@@ -64,5 +80,4 @@ public class CityBicycle extends Bicycle {
 
         return basePrice * countryMultiplier;
     }
-
 }

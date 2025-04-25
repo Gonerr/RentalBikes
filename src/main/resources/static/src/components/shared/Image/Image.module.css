@@ -1,0 +1,99 @@
+.imageContainer {
+    flex: 1; /* Все картинки по умолчанию занимают одинаковое пространство */
+    transition: flex 0.3s ease-in-out, transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+}
+
+.picture{
+    width: 100%;
+    height: 75vh;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+
+    /* Скроем элемент в начальном состоянии */
+    /*opacity: 0;*/
+    /*transform: translateY(120px);*/
+}
+
+.pictureShow{
+    width: 24%;
+    height: 70vh;
+    object-fit: cover;
+
+    opacity: 1;
+    transition: all 3.5s;
+    transform: translateY(0%);
+}
+
+.hovered {
+    transform: scaleX(1.1); /* увеличение изображения при наведении */
+}
+
+.shrink {
+    flex: 0.9;
+    /*margin-right: -10px;*/
+    /*margin-left: -10px;*/
+}
+
+.shrinkLeft {
+    transform: translateX(-20px); /* Отталкиваем соседнюю картинку слева */
+    flex: 0.9;
+    /*margin-right: 10px;*/
+}
+
+.shrinkRight {
+    transform: translateX(20px); /* Отталкиваем соседнюю картинку справа */
+    flex: 0.9;
+    /*margin-left: 10px;*/
+}
+
+.annotation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(65, 45, 36, 0.41); /* Полупрозрачный черный фон */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    color: white; /* Цвет текста внутри аннотации */
+    font-size: 18px;
+    opacity: 0;
+    transition:  opacity 0.3s ease-in-out;
+    padding: 1em;
+}
+
+.hovered .annotation {
+    opacity: 1; /* Показываем аннотацию, когда картинка в центре */
+}
+
+.number{
+    width: 100%;
+    height: 5%;
+    align-items: center;
+    font-family: sc_jurere;
+    font-size: 2em;
+    display: flex;
+    justify-content: space-between;
+}
+.arrow{
+    width: 80%;
+}
+.text_annotation{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.Header{
+    font-family: sc_jurere;
+    font-size: 2em;
+    font-weight: normal;
+}
+.description{
+    text-transform: uppercase;
+    font-weight: 100;
+    font-family: raleway;
+    font-size: calc(var(--index) *0.7);
+    text-align: left;
+}

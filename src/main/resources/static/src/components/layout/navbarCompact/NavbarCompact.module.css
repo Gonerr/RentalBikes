@@ -1,0 +1,25 @@
+.navbar{
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: row;
+    font-size: smaller;
+    gap: var(--dl-size-fourunit);
+    position: absolute;
+    z-index: 3;
+    top: calc(var(--index) * 1);
+    font-weight: 500;
+    align-items: center;
+    justify-content: center;
+    color:#1D1A07;
+    transform: scale(0.9);
+}
+
+.navLink{
+    text-decoration: none;
+    color: var(--dl-color-font);
+}
+
+.image{
+    width: 18%;
+    object-fit: contain;
+}

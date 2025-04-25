@@ -1,0 +1,104 @@
+.layers{
+    height: 110vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.section {
+    min-height: 100vh; /* Каждая секция занимает полный экран */
+}
+.mainHeader{
+    position: relative;
+}
+
+.mainHeader::after {
+    content: '';
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: calc(var(--index) * 10);
+    /*background-image: url("../../../data/img/ground.png");*/
+    /*background-size: cover;*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: center;*/
+    background-image: linear-gradient(
+            to bottom,               /* Градиент идет сверху вниз */
+            rgba(0, 0, 0, 0) 0%,     /* Прозрачный цвет в начале */
+            var(--accent) 50%,    /* Прозрачный цвет на 50% */
+            var(--accent) 100%    /* Черный цвет внизу */
+    );
+    bottom: calc(var(--index) * -4.5);
+}
+
+.header{
+    z-index: 1;
+    transform: translate3d(0, calc(var(--scrollTop) / 2.5), 0);
+    transition: var(--transition);
+    will-change: transform;
+    /*text-transform: uppercase;*/
+    font-weight: 900;
+    text-shadow: 0 0 15px #80685C;
+    opacity: 0.8;
+    color: var(--accent);
+}
+
+/*.title{*/
+/*    font-size: calc(var(--index) *10);*/
+/*    letter-spacing: calc(var(--index)/3);*/
+/*    font-weight: 500;*/
+/*    font-family: caravan;*/
+/*    !*font-family: raleway_f;*!*/
+/*    !*text-transform: uppercase;*!*/
+/*    margin-top: calc(var(--index)*-17.3);*/
+/*}*/
+
+.title{
+    font-size: calc(var(--index) *8.5);
+    letter-spacing: calc(var(--index)/3);
+    font-weight: 500;
+    font-family: sc_jurere;
+    /*font-family: raleway_f;*/
+    /*text-transform: uppercase;*/
+    margin-top: calc(var(--index)*-12.3);
+}
+
+.caption{
+    text-transform: uppercase;
+    font-weight: 900;
+    font-family: raleway_f;
+    font-size: calc(var(--index) /0.6);
+    letter-spacing: calc(var(--index)/1.3);
+    margin-top: calc(var(--index)*-9);
+}
+
+.layer {
+    width: 100%;
+    height: 100%; /* или auto, если хотите подстроить высоту под содержимое */
+    position: absolute;
+    will-change: transform;
+    transition: var(--transition);
+    z-index: 2;
+}
+
+.layer_base {
+    background-image: url("../../../data/img/background.png");
+    background-size: cover; /* масштабирует изображение, чтобы заполнить контейнер */
+    background-repeat: no-repeat; /* предотвращает повторение изображения */
+    background-position: center;
+    transform: translate3d(0, calc(var(--scrollTop) / 3), 0);
+    z-index: 0;
+}
+
+.layer_front {
+    background-image: url("../../../data/img/top_layer.png");
+    background-size: cover; /* масштабирует изображение, чтобы заполнить контейнер */
+    background-repeat: no-repeat; /* предотвращает повторение изображения */
+    background-position: center;
+    transform: scale(1.6) translate3d(0, calc(var(--scrollTop) / 7.7), 0);
+    width: 60%;
+}
+

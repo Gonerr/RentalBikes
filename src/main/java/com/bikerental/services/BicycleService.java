@@ -2,22 +2,31 @@ package com.bikerental.services;
 
 import com.bikerental.models.Bicycle;
 import com.bikerental.models.MountainBicycle;
+import com.bikerental.models.Rental;
 import com.bikerental.repositories.BicycleRepository;
+import com.bikerental.repositories.RentalRepository;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
 public class BicycleService {
+    private static final Logger log = LoggerFactory.getLogger(BicycleService.class);
     private final BicycleRepository bicycleRepository;
+    private final RentalRepository rentalRepository;
+
+    @Autowired
+    public BicycleService(BicycleRepository bicycleRepository, RentalRepository rentalRepository) {
+        this.bicycleRepository = bicycleRepository;
+        this.rentalRepository = rentalRepository;
+    }
 
     public List<Bicycle> getAllBicycles() {
         try {
@@ -48,7 +57,7 @@ public class BicycleService {
     }
 
     public List<Bicycle> getBikesByType(String type) {
-        return bicycleRepository.findByCharacteristics_Type(type);  // Исправленный метод
+        return bicycleRepository.findByCharacteristics_Type(type);
     }
 
     public Bicycle findById(Long id) {
@@ -66,19 +75,40 @@ public class BicycleService {
         }
     }
 
-    public Bicycle rentBicycle(Long id) {
+    public Bicycle rentBicycle(Long id, LocalDateTime startDate, LocalDateTime endDate) {
         Bicycle bike = findById(id);
-        if (!bike.isAvailable()) {
+        
+        // Проверяем, нет ли активных аренд на этот период
+        List<Rental> activeRentals = rentalRepository.findByBicycleIdAndActualReturnDateIsNull(id);
+        boolean isAvailable = activeRentals.stream()
+                .allMatch(rental -> rental.isBicycleAvailableForPeriod(startDate, endDate));
+                
+        if (!isAvailable) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Bicycle is already rented");
+                    HttpStatus.BAD_REQUEST, "Bicycle is not available for the specified period");
         }
-        bike.setAvailable(false);
-        return bicycleRepository.save(bike);
+        
+        return bike;
     }
 
-    public Bicycle returnBicycle(Long id) {
+    public Bicycle returnBicycle(Long id, LocalDateTime actualReturnDate) {
         Bicycle bike = findById(id);
-        bike.setAvailable(true);
-        return bicycleRepository.save(bike);
+        
+        // Находим активную аренду для этого велосипеда
+        Rental activeRental = rentalRepository.findByBicycleIdAndActualReturnDateIsNull(id)
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "No active rental found for this bicycle"));
+        
+        // Устанавливаем фактическую дату возврата
+        activeRental.setActualReturnDate(actualReturnDate);
+        rentalRepository.save(activeRental);
+        
+        return bike;
+    }
+
+    public Bicycle save(Bicycle bicycle) {
+        return bicycleRepository.save(bicycle);
     }
 }

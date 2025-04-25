@@ -1,20 +1,13 @@
 package com.bikerental.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 // Горный велосипед
-@Setter
-@Getter
 @Entity
-
 @DiscriminatorValue("MOUNTAIN")
 @Table(name = "mountain_bicycles")
 @PrimaryKeyJoinColumn(name = "bicycle_id")
-
 public class MountainBicycle extends Bicycle {
-
     private static final double BASE_PRICE = 25000.0;
 
     @Column(name = "suspension_type", nullable = false)
@@ -32,10 +25,25 @@ public class MountainBicycle extends Bicycle {
         super(model, manufacturer, characteristics);
         this.suspensionType = suspensionType;
         this.wheelSize = wheelSize;
+        setPrice(getRemainingPiece());
+        updateDailyRentalPrice();
     }
 
+    // Геттеры и сеттеры
     public String getSuspensionType() {
         return suspensionType != null ? suspensionType.toLowerCase() : null;
+    }
+
+    public void setSuspensionType(String suspensionType) {
+        this.suspensionType = suspensionType;
+    }
+
+    public double getWheelSize() {
+        return wheelSize;
+    }
+
+    public void setWheelSize(double wheelSize) {
+        this.wheelSize = wheelSize;
     }
 
     @Override

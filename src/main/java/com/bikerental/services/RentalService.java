@@ -2,76 +2,89 @@ package com.bikerental.services;
 
 import com.bikerental.models.*;
 import com.bikerental.repositories.RentalRepository;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class RentalService {
+    private static final Logger log = LoggerFactory.getLogger(RentalService.class);
     private final RentalRepository rentalRepository;
     private final BicycleService bicycleService;
     private final ClientService clientService;
-    private final RentalPointService rentalPointService;
+
+    @Autowired
+    public RentalService(RentalRepository rentalRepository,
+                        BicycleService bicycleService,
+                        ClientService clientService) {
+        this.rentalRepository = rentalRepository;
+        this.bicycleService = bicycleService;
+        this.clientService = clientService;
+    }
 
     @Transactional
-    public Rental rentBicycle(Long clientId, Long bicycleId, Long rentalPointId, LocalDateTime endDate) {
+    public Rental rentBicycle(Long clientId, Long bicycleId, LocalDateTime startDate, LocalDateTime endDate) {
         Client client = clientService.findById(clientId);
         Bicycle bicycle = bicycleService.findById(bicycleId);
-        RentalPoint rentalPoint = rentalPointService.findById(rentalPointId);
 
-        if (!bicycle.isAvailable()) {
-            throw new IllegalStateException("Bicycle is already rented");
+        // Проверяем, нет ли активных аренд на этот период
+        List<Rental> activeRentals = rentalRepository.findByBicycleIdAndActualReturnDateIsNull(bicycleId);
+        boolean isAvailable = activeRentals.stream()
+                .allMatch(rental -> rental.isBicycleAvailableForPeriod(startDate, endDate));
+
+        if (!isAvailable) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Bicycle is not available for the specified period");
         }
 
         Rental rental = new Rental();
         rental.setClient(client);
         rental.setBicycle(bicycle);
-        rental.setRentalPoint(rentalPoint);
-        rental.setStartDate(LocalDateTime.now());
+        rental.setStartDate(startDate);
         rental.setEndDate(endDate);
-
-        bicycle.setAvailable(false);
-        rentalPoint.removeBicycle(bicycle);
-        client.getRentedBicycles().add(bicycle);
+        rental.setTotalCost(rental.calculateCost());
 
         return rentalRepository.save(rental);
     }
 
     @Transactional
-    public Rental returnBicycle(Long rentalId, Long returnPointId) {
+    public Rental returnBicycle(Long rentalId) {
         Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new IllegalArgumentException("Rental not found"));
-
-        RentalPoint returnPoint = rentalPointService.findById(returnPointId);
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Rental not found"));
 
         rental.setActualReturnDate(LocalDateTime.now());
-        rental.setStatus("COMPLETED");
-
-        Bicycle bicycle = rental.getBicycle();
-        bicycle.setAvailable(true);
-        returnPoint.addBicycle(bicycle);
-
-        Client client = rental.getClient();
-        client.getRentedBicycles().remove(bicycle);
-
         return rentalRepository.save(rental);
     }
 
     public List<Rental> getActiveRentals() {
-        return rentalRepository.findActiveRentals();
+        return rentalRepository.findByActualReturnDateIsNull();
+    }
+
+    public List<Rental> getActiveRentalsForBicycle(Long bicycleId) {
+        return rentalRepository.findByBicycleIdAndActualReturnDateIsNull(bicycleId);
+    }
+
+    public Rental getRentalById(Long id) {
+        return rentalRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Rental not found"));
     }
 
     @Scheduled(fixedRate = 3600000) // Проверка каждый час
     public void checkExpiredRentals() {
-        List<Rental> expired = rentalRepository.findByEndDateBeforeAndActiveTrue(LocalDateTime.now());
+        List<Rental> expired = rentalRepository.findByEndDateBeforeAndActualReturnDateIsNull(LocalDateTime.now());
         expired.forEach(rental -> {
-            rental.getBicycle().setAvailable(true);
+            // Можно добавить логику для обработки просроченных аренд
+            log.warn("Rental {} is expired but not returned", rental.getId());
         });
-        rentalRepository.saveAll(expired);
     }
 }

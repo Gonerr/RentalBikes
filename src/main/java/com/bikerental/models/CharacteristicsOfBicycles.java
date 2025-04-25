@@ -1,38 +1,62 @@
 package com.bikerental.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Entity
-@Table(name = "characteristics_of_bicycles")
-
+@Table(name = "characteristics")
 public class CharacteristicsOfBicycles {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type", nullable = false, length = 50)
-    private String type;        // Тип велосипеда
+    @Column(name = "frame_material", nullable = false, length = 50)
+    private String frameMaterial;  // Материал рамы
 
-    @Column
-    private double weight;      // Вес велосипеда
+    @Column(name = "weight", nullable = false, precision = 4)
+    private double weight;         // Вес велосипеда
 
-    @Column(name = "gear_count", nullable = false)
-    private int gearCount;     // Количество передач
-
-    @Column(name = "has_lights", nullable = false)
-    private boolean hasLights;  // Наличие фонарика
+    @Column(name = "number_of_speeds", nullable = false)
+    private int numberOfSpeeds;    // Количество скоростей
 
     public CharacteristicsOfBicycles() {
     }
 
-    public String getCharacteristics() {
-        return "Type: " + type + ", Weight: " + weight +
-                ", Gears: " + gearCount + ", Lights: " + hasLights;
+    public CharacteristicsOfBicycles(String frameMaterial, double weight, int numberOfSpeeds) {
+        this.frameMaterial = frameMaterial;
+        this.weight = weight;
+        this.numberOfSpeeds = numberOfSpeeds;
     }
 
-    public boolean getHasLights() { return hasLights;}
+    // Геттеры и сеттеры
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFrameMaterial() {
+        return frameMaterial;
+    }
+
+    public void setFrameMaterial(String frameMaterial) {
+        this.frameMaterial = frameMaterial;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getNumberOfSpeeds() {
+        return numberOfSpeeds;
+    }
+
+    public void setNumberOfSpeeds(int numberOfSpeeds) {
+        this.numberOfSpeeds = numberOfSpeeds;
+    }
 }

@@ -1,17 +1,12 @@
 package com.bikerental.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
-
 @DiscriminatorValue("ROAD")
 @Table(name = "road_bicycles")
 @PrimaryKeyJoinColumn(name = "bicycle_id")
 // Шоссейный велосипед
-@Setter
-@Getter
 public class RoadBicycle extends Bicycle {
     private static final double BASE_PRICE = 30000.0;
     @Column(name = "tire_width", nullable = false)
@@ -29,6 +24,25 @@ public class RoadBicycle extends Bicycle {
         super(model, manufacturer, characteristics);
         this.tireWidth = tireWidth;
         this.isAero = isAero;
+        setPrice(getRemainingPiece());
+        updateDailyRentalPrice();
+    }
+
+    // Геттеры и сеттеры
+    public double getTireWidth() {
+        return tireWidth;
+    }
+
+    public void setTireWidth(double tireWidth) {
+        this.tireWidth = tireWidth;
+    }
+
+    public boolean isAero() {
+        return isAero;
+    }
+
+    public void setAero(boolean aero) {
+        isAero = aero;
     }
 
     @Override

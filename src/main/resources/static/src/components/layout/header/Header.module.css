@@ -1,0 +1,33 @@
+.mainContainer{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding: var(--dl-size-unit) var(--dl-size-fiveunit);
+}
+.upperContainer{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--dl-size-unit);
+    width: 95%;
+}
+
+.allLinks{
+    width:20%;
+    display:flex;
+    flex-direction:row;
+    gap: var(--dl-size-doubleunit);
+    height: 35%;
+}
+
+.textSearch{
+    width: 20%;
+    height: 2em;
+    border-radius: var(--dl-border-radius-medium);
+}
+
+.image{
+    width: 5%;
+    object-fit: cover;
+}

@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: miamaNueva;
+  src: url("./data/fonts/ofont.ru_Miama Nueva.ttf");
+}
+
+@font-face {
+  font-family: raleway;
+  src: url("./data/fonts/raleway-regular.woff2");
+}
+@font-face {
+  font-family: margarita;
+  src: url("./data/fonts/ofont.ru_Margarita script.ttf");
+}
+@font-face {
+  font-family: raleway_f;
+  src: url("./data/fonts/raleway-black.woff2");
+  font-weight: 900;
+}
+@font-face {
+  font-family: caravan;
+  src: url("./data/fonts/Caravan.otf");
+}
+@font-face {
+  font-family: sc_jurere;
+  src: url("./data/fonts/SC Jurerê.ttf");
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: raleway, miamaNueva;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+:root {
+  --dl-size-tripleunit: 3rem;
+  --dl-size-fiveunit: 5rem;
+  --dl-size-doubleunit: 2rem;
+  --dl-size-fourunit: 4rem;
+  --dl-size-unit: 1rem;
+  --dl-border-radius-medium: 24px;
+  --dl-color-background: #8A8278;
+  --dl-color-accent: #f59015e0;
+  --dl-color-font: #1D1A07S;
+
+  --index:calc(1vw + 1vh);
+  --text: #e7e7e0;
+  --accent: #403328;
+  --transition: transform .75s cubic-bezier(.075, .5, 0, 1);
+}
+
+.delimeter{
+  width:100%;
+  height: 1px;
+  opacity: 0.5;
+  margin-bottom: 1.3em;
+  margin-top: 1em;
+  background-image: linear-gradient(0deg, rgba(213, 188, 188, 0.16), rgba(94, 51, 51, 0.84) 50%, rgba(0,0,0,0)),  linear-gradient(0deg, rgba(234, 200, 200, 0.23), rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.25));
+  background-repeat: no-repeat, no-repeat;
+  background-position: 50% 100%, 50% 100%;
+  background-size: 100% 1px, 100% 1px;
+  background-origin: padding-box, border-box;
+}
+

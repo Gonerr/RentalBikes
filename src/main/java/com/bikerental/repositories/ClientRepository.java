@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByNameContaining(String namePart);
+    
+    Client findByPhone(String phone);
 }
